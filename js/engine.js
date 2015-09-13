@@ -1,3 +1,4 @@
+
 /* Engine.js
  * This file provides the game loop functionality (update entities and render),
  * draws the initial game board on the screen, and then calls the update and
@@ -23,24 +24,11 @@ var Engine = (function(global) {
         win = global.window,
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
-        lastTime,
-        gameTime = 0;
+        lastTime;
 
-    canvas.width = 505; //505
-    canvas.height = 606; //606
-
+    canvas.width = 505;
+    canvas.height = 606;
     doc.body.appendChild(canvas);
-
-    var player = {
-        pos: [0, 0],
-        sprite: new Sprite('images/char-boy.png', [1, 1], [39, 39], 16, 'vertical', [0, 1])
-    };
-
-    var allEnemies = [];
-
-    var playerSpeed = 200;
-    var enemySpeed = 100;
-
 
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
@@ -92,86 +80,42 @@ var Engine = (function(global) {
      * on the entities themselves within your app.js file).
      */
     function update(dt) {
-
-        gameTime += dt;
-
-        handleInput(dt);
-
         updateEntities(dt);
-
-        // It gets harder over time by adding enemies using this
-        // equation: 1-.993^gameTime
-        if(Math.random() < 1 - Math.pow(.993, gameTime)) {
-            allEnemies.push({
-                pos: [canvas.width, Math.random() * (canvas.height - 39)],
-                sprite: new Sprite('images/enemy-bug.png', [0, 78], [80, 39], 6, [0, 1, 2, 3, 2, 1])
-            });
-        }
-
-        checkCollisions();
+         checkCollisions();
     }
 
-    function checkCollisions() {
-        checkPlayerBounds();
+    function checkCollisions(){
+        var playerX = player.x;
+        var playerY = player.y;
 
-        // Run collision detection for all enemies
-        for(var i=0; i< allEnemies.length; i++) {
-            var pos = allEnemies[i].pos;
-            var size = allEnemies[i].sprite.size;
-
-            //if(boxCollides(pos, size, player.pos, player.sprite.size)) {
-            //    gameOver();
-            //}
-        }
-    }
-
-    function collides(x, y, r, b, x2, y2, r2, b2) {
-        return !(r <= x2 || x > r2 ||
-        b <= y2 || y > b2);
-    }
-
-    function boxCollides(pos, size, pos2, size2) {
-        return collides(pos[0], pos[1],
-            pos[0] + size[0], pos[1] + size[1],
-            pos2[0], pos2[1],
-            pos2[0] + size2[0], pos2[1] + size2[1]);
+        allEnemies.forEach(function(enemy){
+            var enemyX = enemy.x;
+            var enemyY = enemy.y;
+            if(playerY >= enemyY - 20 && playerY <= enemyY + 20){
+                if(playerX >= enemyX - 20 && playerX <= enemyX + 20){
+                    this.reset();
+                }
+            }
+        });
     }
 
     function checkPlayerBounds() {
         // Check bounds
-        if(player.pos[0] < 0) {
-            player.pos[0] = 0;
+        if(player.x < 0) {
+            player.x = 0;
         }
-        else if(player.pos[0] > canvas.width - player.sprite.size[0]) {
+        else if(player.x > canvas.width - player.sprite.size[0]) {
             player.pos[0] = canvas.width - player.sprite.size[0];
         }
 
-        if(player.pos[1] < 0) {
-            player.pos[1] = 0;
+        if(player.y < 0) {
+            player.y = 0;
         }
-        else if(player.pos[1] > canvas.height - player.sprite.size[1]) {
-            player.pos[1] = canvas.height - player.sprite.size[1];
+        else if(player.y > canvas.height - player.sprite.size[1]) {
+            player.y = canvas.height - player.sprite.size[1];
         }
     }
 
-    function handleInput(dt) {
-        if(input.isDown('DOWN') || input.isDown('s')) {
-            player.pos[1] += playerSpeed * dt;
-        }
-
-        if(input.isDown('UP') || input.isDown('w')) {
-            player.pos[1] -= playerSpeed * dt;
-        }
-
-        if(input.isDown('LEFT') || input.isDown('a')) {
-            player.pos[0] -= playerSpeed * dt;
-        }
-
-        if(input.isDown('RIGHT') || input.isDown('d')) {
-            player.pos[0] += playerSpeed * dt;
-        }
-
-    }
 
 
     /* This is called by the update function  and loops through all of the
@@ -182,33 +126,10 @@ var Engine = (function(global) {
      * render methods.
      */
     function updateEntities(dt) {
-
-        player.sprite.update(dt);
-
-
-        for(var i=0; i<allEnemies.length; i++) {
-            allEnemies[i].pos[0] -= enemySpeed * dt;
-            allEnemies[i].sprite.update(dt);
-
-            // Remove if offscreen
-            if(allEnemies[i].pos[0] + allEnemies[i].sprite.size[0] < 0) {
-                allEnemies.splice(i, 1);
-                i--;
-            }
-        }
-
-        //allEnemies.forEach(function(enemy) {
-        //    enemy.sprite.update(dt);
-        //
-        //    enemy.pos[0] -= enemySpeed * dt;
-        //    enemy.sprite.update(dt);
-        //
-        //    // Remove if offscreen
-        //    if(enemy.pos[0] + enemy[i].sprite.size[0] < 0) {
-        //        enemy.splice(i, 1);
-        //        //i--;
-        //    }
-        //});
+        allEnemies.forEach(function(enemy) {
+            enemy.update(dt);
+        });
+        player.update();
     }
 
     /* This function initially draws the "game level", it will then call
@@ -263,10 +184,10 @@ var Engine = (function(global) {
          * the render function you have defined.
          */
         allEnemies.forEach(function(enemy) {
-            enemy.sprite.render(ctx);
+            enemy.render();
         });
 
-        player.sprite.render(ctx);
+        player.render();
     }
 
     /* This function does nothing but it could have been a good place to
@@ -275,9 +196,6 @@ var Engine = (function(global) {
      */
     function reset() {
         // noop
-
-        allEnemies = [];
-        player.pos = [50, canvas.height / 2];
     }
 
     /* Go ahead and load all of the images we know we're going to need to
