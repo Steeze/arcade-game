@@ -6,13 +6,7 @@ var Enemy = function(x, y, speed) {
     this.speed = speed;
 };
 
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
-    //dt = dt * 100;
     this.x += this.speed * dt;
 
     if(this.x >= 505){
@@ -21,53 +15,47 @@ Enemy.prototype.update = function(dt) {
     checkCollision(this);
 };
 
-
-// Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(resources.get(this.sprite), this.x, this.y);
 };
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
+var Player = function(x, y, speed){
+    this.sprite = 'images/char-boy.png';
+    this.x = x;
+    this.y = y;
+    this.speed = speed;
+};
 
-    Object.prototype.reset = function() {
-        player.x = 200;
-        player.y = 400;
-    };
+Player.prototype.reset = function(){
+  this.x = 200;
+  this.y = 400;  
+};
 
-    var Player = function(x, y, speed){
-       this.sprite = 'images/char-boy.png';
-        this.x = x;
-        this.y = y;
-        this.speed = speed;
-    };
+Player.prototype.update = function(){
 
-    Player.prototype.update = function(){
+    //if left key is pressed and player is not on edge of map, pressed decrement x
+    if(this.ctlKey === 'left' && this.x > 0){
+        this.x = this.x - 50;
+        //if right key is pressed and player is not on edge of map increment x
+    }else if(this.ctlKey === 'right' && this.x != 400){
+        this.x = this.x + 50;
+        //if up key is pressed increment y
+    }else if(this.ctlKey === 'up'){
+        this.y = this.y - 50;
+        //if down key is pressed and player is not on edge of map decrement y
+    }else if (this.ctlKey === 'down' && this.y != 400){
+        this.y = this.y + 50;
+    }
+    this.ctlKey = null;
 
-        //if left key is pressed and player is not on edge of map, pressed decrement x
-        if(this.ctlKey === 'left' && this.x > 0){
-            this.x = this.x - 50;
-            //if right key is pressed and player is not on edge of map increment x
-        }else if(this.ctlKey === 'right' && this.x != 400){
-            this.x = this.x + 50;
-            //if up key is pressed increment y
-        }else if(this.ctlKey === 'up'){
-            this.y = this.y - 50;
-            //if down key is pressed and player is not on edge of map decrement y
-        }else if (this.ctlKey === 'down' && this.y != 400){
-            this.y = this.y + 50;
-        }
-        this.ctlKey = null;
+    checkPlayerBounds(this);
 
-        checkPlayerBounds(this);
-
-        checkIfPlayerMadeIt(this);
+    checkIfPlayerMadeIt(this);
 
 };
 
 Player.prototype.render = function () {
-        ctx.drawImage(resources.get(this.sprite), this.x, this.y);
+    ctx.drawImage(resources.get(this.sprite), this.x, this.y);
 };
 
 Player.prototype.handleInput = function(keyPress) {
@@ -89,45 +77,70 @@ Player.prototype.handleInput = function(keyPress) {
      if (player.y + 131 >= enemy.y + 90 && player.x + 25 <= enemy.x + 88 && player.y + 73 <= enemy.y + 135 && player.x + 76 >= enemy.x + 11) {
          player.x = 202.5;
          player.y = 383;
-
          playerScore = playerScore - 1;
-
          displayScore(playerScore);
      }
  };
 
 var checkIfPlayerMadeIt = function(player){
     if(player.y < 25){
-        this.reset();
+        player.reset();
         gameLevel += 1;
         playerScore += 10;
         levelUp(playerScore, gameLevel);
     }
 };
 
-var displayScore = function(playerScore){
+var getCanvas = function(){
    var cs = document.getElementsByTagName('canvas');
-   var firstCsElement = cs[0];
-    scoreDisplay.innerHTML = 'Score: ' + playerScore + ' ';
-    document.body.insertBefore(scoreDisplay, firstCsElement[0]);
+   return cs[0];
+};
+
+var displayScore = function(playerScore){
+   var canvasElement =  getCanvas(); 
+   var displayPlayerScore = determinePlayerScore(playerScore);
+    scoreDisplay.innerHTML = 'Score: ' + displayPlayerScore + ' ';
+    document.body.insertBefore(scoreDisplay, canvasElement[0]);
 };
 
 var displayLevel = function(gameLevel){
-    var cs = document.getElementsByTagName('canvas');
-    var firstCsElement = cs[0];
+    var firstCsElement = getCanvas(); 
     levelDisplay.innerHTML = 'Level: ' + gameLevel+' ';
     document.body.insertBefore(levelDisplay, firstCsElement[0]);
 };
 
+var determinePlayerScore = function(playerScore){
+   console.log(playerScore);
+    
+   if(playerScore <= 0)
+   {
+     playerScore = 0;
+   }
+   
+   return playerScore;
+};
+
+var determineGameLevel = function(gameLevel){
+    if(gameLevel === 1){
+          gameLevel = gameLevel + 1
+      }
+      else{
+          gameLevel - 1
+      }
+      return gameLevel;
+};
 
 var levelUp = function(playerScore, gameLevel){
-      var newGameLevel = gameLevel - 1;
+        
+      var newGameLevel = determineGameLevel(gameLevel);
+      
       allEnemies.splice(0, allEnemies.length);
+      
       for (var i = 0; i <= newGameLevel - 1; i++) {
           var enemy = new Enemy(0, Math.random() * 184 + 50, Math.random() * 256);
           allEnemies.push(enemy);
       }
-
+      
     displayScore(playerScore);
     displayLevel(newGameLevel);
   };
