@@ -81,40 +81,39 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        //checkCollisions();
     }
 
-    function checkCollisions(){
-        var playerX = player.x;
-        var playerY = player.y;
+    //function checkCollisions(){
+    //    var playerX = player.x;
+    //    var playerY = player.y;
+    //
+    //    allEnemies.forEach(function(enemy){
+    //        var enemyX = enemy.x;
+    //        var enemyY = enemy.y;
+    //        if(playerY >= enemyY - 20 && playerY <= enemyY + 20){
+    //            if(playerX >= enemyX - 20 && playerX <= enemyX + 20){
+    //                this.reset();
+    //            }
+    //        }
+    //    });
+    //}
 
-        allEnemies.forEach(function(enemy){
-            var enemyX = enemy.x;
-            var enemyY = enemy.y;
-            if(playerY >= enemyY - 20 && playerY <= enemyY + 20){
-                if(playerX >= enemyX - 20 && playerX <= enemyX + 20){
-                    this.reset();
-                }
-            }
-        });
-    }
-
-    function checkPlayerBounds() {
-        // Check bounds
-        if(player.x < 0) {
-            player.x = 0;
-        }
-        else if(player.x > canvas.width - player.sprite.size[0]) {
-            player.pos[0] = canvas.width - player.sprite.size[0];
-        }
-
-        if(player.y < 0) {
-            player.y = 0;
-        }
-        else if(player.y > canvas.height - player.sprite.size[1]) {
-            player.y = canvas.height - player.sprite.size[1];
-        }
-    }
+    //function checkPlayerBounds() {
+    //    // Check bounds
+    //    if(player.x < 0) {
+    //        player.x = 0;
+    //    }
+    //    else if(player.x > canvas.width - player.sprite.size[0]) {
+    //        player.pos[0] = canvas.width - player.sprite.size[0];
+    //    }
+    //
+    //    if(player.y < 0) {
+    //        player.y = 0;
+    //    }
+    //    else if(player.y > canvas.height - player.sprite.size[1]) {
+    //        player.y = canvas.height - player.sprite.size[1];
+    //    }
+    //}
 
 
 

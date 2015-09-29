@@ -89,6 +89,10 @@ Enemy.prototype.render = function() {
      if (player.y + 131 >= enemy.y + 90 && player.x + 25 <= enemy.x + 88 && player.y + 73 <= enemy.y + 135 && player.x + 76 >= enemy.x + 11) {
          player.x = 202.5;
          player.y = 383;
+
+         playerScore = playerScore - 1;
+
+         displayScore(playerScore);
      }
  };
 
@@ -101,15 +105,20 @@ var checkIfPlayerMadeIt = function(player){
     }
 };
 
-var displayScoreLevel = function(playerScore, gameLevel){
-
-    console.log(playerScore, gameLevel);
-
+var displayScore = function(playerScore){
    var cs = document.getElementsByTagName('canvas');
    var firstCsElement = cs[0];
-    displayScoreAndLevelDiv.innerHTML = 'Score: ' + playerScore + '  ' + 'Level: ' + gameLevel;
-    document.body.insertBefore(displayScoreAndLevelDiv, firstCsElement[0]);
+    scoreDisplay.innerHTML = 'Score: ' + playerScore + ' ';
+    document.body.insertBefore(scoreDisplay, firstCsElement[0]);
 };
+
+var displayLevel = function(gameLevel){
+    var cs = document.getElementsByTagName('canvas');
+    var firstCsElement = cs[0];
+    levelDisplay.innerHTML = 'Level: ' + gameLevel+' ';
+    document.body.insertBefore(levelDisplay, firstCsElement[0]);
+};
+
 
 var levelUp = function(playerScore, gameLevel){
       var newGameLevel = gameLevel - 1;
@@ -119,8 +128,8 @@ var levelUp = function(playerScore, gameLevel){
           allEnemies.push(enemy);
       }
 
-    displayScoreLevel(playerScore, newGameLevel);
-
+    displayScore(playerScore);
+    displayLevel(newGameLevel);
   };
 
 var checkPlayerBounds = function() {
@@ -144,8 +153,8 @@ var playerScore = 0;
 
 var gameLevel = 1;
 
-var displayScoreAndLevelDiv = document.createElement('div');
-
+var scoreDisplay = document.createElement('div');
+var levelDisplay = document.createElement('div');
 
 
 // This listens for key presses and sends the keys to your
