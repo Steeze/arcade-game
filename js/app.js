@@ -1,10 +1,5 @@
 // Enemies our player must avoid
 var Enemy = function(x, y, speed) {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
     this.x = x;
     this.y = y;
@@ -23,7 +18,7 @@ Enemy.prototype.update = function(dt) {
     if(this.x >= 505){
         this.x = 0;
     }
-    //checkCollision(this);
+    checkCollision(this);
 };
 
 
@@ -65,10 +60,10 @@ Enemy.prototype.render = function() {
         }
         this.ctlKey = null;
 
-        //If on water, reset
-        if(this.y < 25){
-            this.reset();
-        }
+        checkPlayerBounds(this);
+
+        checkIfPlayerMadeIt(this);
+
     };
 
     Player.prototype.render = function () {
@@ -80,31 +75,77 @@ Enemy.prototype.render = function() {
         player.x -= player.speed;
     }
     if (keyPress == 'up') {
-        player.y -= player.speed - 20;
+        player.y -= player.speed - 10;
     }
     if (keyPress == 'right') {
         player.x += player.speed;
     }
     if (keyPress == 'down') {
-        player.y += player.speed - 20;
+        player.y += player.speed - 10;
     }
  };
 
+ var checkCollision = function(enemy){
+     if (player.y + 131 >= enemy.y + 90 && player.x + 25 <= enemy.x + 88 && player.y + 73 <= enemy.y + 135 && player.x + 76 >= enemy.x + 11) {
+         player.x = 202.5;
+         player.y = 383;
+     }
+ };
 
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
+var checkIfPlayerMadeIt = function(player){
+    if(player.y < 25){
+        this.reset();
+        gameLevel += 1;
+        playerScore += 10;
+        levelUp(playerScore, gameLevel);
+    }
+};
+
+var displayScoreLevel = function(playerScore, gameLevel){
+
+    console.log(playerScore, gameLevel);
+
+   var cs = document.getElementsByTagName('canvas');
+   var firstCsElement = cs[0];
+    displayScoreAndLevelDiv.innerHTML = 'Score: ' + playerScore + '  ' + 'Level: ' + gameLevel;
+    document.body.insertBefore(displayScoreAndLevelDiv, firstCsElement[0]);
+};
+
+var levelUp = function(playerScore, gameLevel){
+      var newGameLevel = gameLevel - 1;
+      allEnemies.splice(0, allEnemies.length);
+      for (var i = 0; i <= newGameLevel - 1; i++) {
+          var enemy = new Enemy(0, Math.random() * 184 + 50, Math.random() * 256);
+          allEnemies.push(enemy);
+      }
+
+    displayScoreLevel(playerScore, newGameLevel);
+
+  };
+
+var checkPlayerBounds = function() {
+    if (player.y > 383 ) {
+        player.y = 383;
+    }
+    if (player.x > 402.5) {
+        player.x = 402.5;
+    }
+    if (player.x < 2.5) {
+        player.x = 2.5;
+    }
+};
 
 var allEnemies = [];
-    allEnemies.push(new Enemy(-2, 60, Math.random() * 256));
-    allEnemies.push(new Enemy(-2, 100, Math.random() * 256));
-    allEnemies.push(new Enemy(-2,150, Math.random() * 256));
-    allEnemies.push(new Enemy(-2,220, Math.random() * 256));
-
+allEnemies.push(new Enemy(0, Math.random() * 184 + 50, Math.random() * 256 ));
 
 var player = new Player(202.5, 383, 50);
-//var enemy = new Enemy(0, Math.random() * 184 + 50, Math.random() * 256);
-//allEnemies.push(enemy);
+
+var playerScore = 0;
+
+var gameLevel = 1;
+
+var displayScoreAndLevelDiv = document.createElement('div');
+
 
 
 // This listens for key presses and sends the keys to your
