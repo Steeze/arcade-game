@@ -64,13 +64,13 @@ Enemy.prototype.render = function() {
 
         checkIfPlayerMadeIt(this);
 
-    };
+};
 
-    Player.prototype.render = function () {
+Player.prototype.render = function () {
         ctx.drawImage(resources.get(this.sprite), this.x, this.y);
-    };
+};
 
-    Player.prototype.handleInput = function(keyPress) {
+Player.prototype.handleInput = function(keyPress) {
     if (keyPress == 'left') {
         player.x -= player.speed;
     }
