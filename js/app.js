@@ -1,4 +1,10 @@
 /**
+ * Credit Due: 
+ * Making Sprite-based Games with Canvas: http://jlongster.com/Making-Sprite-based-Games-with-Canvas
+ * How to make a simple HTML5 Canvas game: http://www.lostdecadegames.com/how-to-make-a-simple-html5-canvas-game/
+ */
+
+/**
  * @description Represents a Enemy in the game.
  * @constructor
  * @param {int} x - The x coordinate position on the canvas
@@ -47,7 +53,7 @@ var Player = function(x, y, speed){
 };
 
 /**
- * @description reset - Returns the player to the start position after a collision with an enemy.
+ * @description reset - Returns the player to the start position on the canvas after a collision with an enemy or a successful trip to the other side.
  */
 Player.prototype.reset = function(){
   this.x = 200;
@@ -94,12 +100,41 @@ Player.prototype.handleInput = function(keyPress) {
  * @description checkCollision - Checks the position of the enemy in response to the player. If a collision occurs the score is decreased by a point, the score is updated and the player reset.
  * @param enemy {object} - This represents the enemy in the game.
  */
- var checkCollision = function(enemy){    
-     if (player.y + 131 >= enemy.y + 90 && player.x + 25 <= enemy.x + 88 && player.y + 73 <= enemy.y + 135 && player.x + 76 >= enemy.x + 11) {
+ var checkCollision = function(enemy){
+     
+     console.log(player);
+         
+     if (
+         player.y + 131 >= enemy.y + 90 && 
+         
+         player.x + 25 <= enemy.x + 88 && 
+         
+         player.y + 73 <= enemy.y + 135 && 
+         
+         player.x + 76 >= enemy.x + 11) {
+         
          player.reset();
          playerScore =  determinePlayerScore(playerScore, 'collided');
          displayScore(playerScore);
      }
+         
+         //a.x < b.x + b.width &&
+        
+         //a.x + a.width > b.x &&
+        
+         //a.y < b.y + b.height &&
+        
+         //a.y + a.height > b.y;
+         
+         //------------------------------------------
+        //object1.x < object2.x + object2.width  && 
+        
+        //object1.x + object1.width  > object2.x &&
+		
+        //object1.y < object2.y + object2.height && 
+        
+        //object1.y + object1.height > object2.y
+         
  };
 
 /**
