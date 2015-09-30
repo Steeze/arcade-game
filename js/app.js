@@ -13,7 +13,7 @@ var Enemy = function(x, y, speed) {
 };
 
 /**
- * @description update - position method for a enemy in the game.
+ * @description update - position method for a enemy in the game. When the enemy reaches the right boarder of the canvas, its set back to the beginning.
  * @param dt - delta time - Used for smooth animation in the game.
  */
 Enemy.prototype.update = function(dt) {
@@ -55,22 +55,10 @@ Player.prototype.reset = function(){
 };
 
 /**
- * @description update - Updates the player based on the keyboard input received. Also checks the players boundaries on the canvas and if they made it to safety.
+ * @description update - Update is called from the engine and currenty checks if the player is within its bounds and if the player has made it safely accross.
  */
 Player.prototype.update = function(){
-
-    if(this.ctlKey === 'left' && this.x > 0){
-        this.x = this.x - 50;
-    }else if(this.ctlKey === 'right' && this.x != 400){
-        this.x = this.x + 50;
-    }else if(this.ctlKey === 'up'){
-        this.y = this.y - 50;
-    }else if (this.ctlKey === 'down' && this.y != 400){
-        this.y = this.y + 50;
-    }
-
-    this.ctlKey = null;
-
+    
     checkPlayerBounds(this);
 
     checkIfPlayerMadeIt(this);
@@ -106,7 +94,7 @@ Player.prototype.handleInput = function(keyPress) {
  * @description checkCollision - Checks the position of the enemy in response to the player. If a collision occurs the score is decreased by a point, the score is updated and the player reset.
  * @param enemy {object} - This represents the enemy in the game.
  */
- var checkCollision = function(enemy){
+ var checkCollision = function(enemy){    
      if (player.y + 131 >= enemy.y + 90 && player.x + 25 <= enemy.x + 88 && player.y + 73 <= enemy.y + 135 && player.x + 76 >= enemy.x + 11) {
          player.reset();
          playerScore =  determinePlayerScore(playerScore, 'collided');
@@ -203,14 +191,17 @@ var levelUp = function(playerScore, gameLevel){
  * @param player {object} - This represents the player in the game.
  */
 var checkPlayerBounds = function(player) {
-    if (player.y > 383 ) {
-        player.y = 383;
+    
+    console.log(player);
+    
+    if (player.y > 400 ) {
+        player.y = 400;
     }
-    if (player.x > 402.5) {
-        player.x = 402.5;
+    if (player.x > 418) {
+        player.x = 418;
     }
-    if (player.x < 2.5) {
-        player.x = 2.5;
+    if (player.x < -15) {
+        player.x = -15;
     }
 };
 
