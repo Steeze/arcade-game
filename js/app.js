@@ -85,7 +85,7 @@ Player.prototype.render = function () {
 
 /**
  * @description handleInput -  Responses to the key up event captured in the key up event listener.
- * @param keyPress {string} - The key up event converted to a string in the event listner.
+ * @param keyPress {string} - The key up event converted to a string in the event listener.
  */
 Player.prototype.handleInput = function(keyPress) {
     if (keyPress == 'left') {
