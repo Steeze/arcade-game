@@ -74,7 +74,6 @@ Player.prototype.update = function(){
     checkPlayerBounds(this);
 
     checkIfPlayerMadeIt(this);
-
 };
 
 /**
