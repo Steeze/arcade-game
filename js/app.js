@@ -112,7 +112,7 @@ Player.prototype.determineScore = function(scoreType){
 
 Player.prototype.levelUp = function(){
     
-  allEnemies.splice(0, allEnemies.length);
+    allEnemies.splice(0, allEnemies.length);
       
     for (var i = 0; i <= this.gameLevel - 1; i++) {
         var enemy = new Enemy(0, Math.random() * 184 + 50, 135, 88, Math.random() * 256);
