@@ -9,12 +9,16 @@
  * @constructor
  * @param {int} x - The x coordinate position on the canvas
  * @param {int} y - The y coordinate position on the canvas
+ * @param height - The height of the enemy sprite
+ * @param width - The width of the enemy sprite
  * @param {int} speed - The speed of the enemy in the game
   */
-var Enemy = function(x, y, speed) {
+var Enemy = function(x, y, height, width, speed) {
     this.sprite = 'images/enemy-bug.png';
     this.x = x;
     this.y = y;
+    this.height = height;
+    this.width = width;
     this.speed = speed;
 };
 
@@ -43,12 +47,16 @@ Enemy.prototype.render = function() {
  * @constructor
  * @param x - The x coordinate position on the canvas
  * @param y - The y coordinate position on the canvas
+ * @param height - The height of the player sprite
+ * @param width - The width of the player sprite
  * @param speed - The speed of the player in the game
  */
-var Player = function(x, y, speed){
+var Player = function(x, y, height, width, speed){
     this.sprite = 'images/char-boy.png';
     this.x = x;
     this.y = y;
+    this.height = height;
+    this.width = width;
     this.speed = speed;
 };
 
@@ -101,40 +109,17 @@ Player.prototype.handleInput = function(keyPress) {
  * @param enemy {object} - This represents the enemy in the game.
  */
  var checkCollision = function(enemy){
-     
-     console.log(player);
-         
-     if (
-         player.y + 131 >= enemy.y + 90 && 
-         
-         player.x + 25 <= enemy.x + 88 && 
-         
-         player.y + 73 <= enemy.y + 135 && 
-         
-         player.x + 76 >= enemy.x + 11) {
+
+     if (player.y + player.height > enemy.y + 90 &&
+         player.x < enemy.x + enemy.width &&
+         player.y + 73 < enemy.y + enemy.height &&
+         player.x + player.width > enemy.x + 11) {
          
          player.reset();
          playerScore =  determinePlayerScore(playerScore, 'collided');
          displayScore(playerScore);
      }
-         
-         //a.x < b.x + b.width &&
-        
-         //a.x + a.width > b.x &&
-        
-         //a.y < b.y + b.height &&
-        
-         //a.y + a.height > b.y;
-         
-         //------------------------------------------
-        //object1.x < object2.x + object2.width  && 
-        
-        //object1.x + object1.width  > object2.x &&
-		
-        //object1.y < object2.y + object2.height && 
-        
-        //object1.y + object1.height > object2.y
-         
+
  };
 
 /**
@@ -213,7 +198,7 @@ var levelUp = function(playerScore, gameLevel){
       allEnemies.splice(0, allEnemies.length);
       
       for (var i = 0; i <= gameLevel - 1; i++) {
-          var enemy = new Enemy(0, Math.random() * 184 + 50, Math.random() * 256);
+          var enemy = new Enemy(0, Math.random() * 184 + 50, 135, 88, Math.random() * 256);
           allEnemies.push(enemy);
       }
       
@@ -226,9 +211,6 @@ var levelUp = function(playerScore, gameLevel){
  * @param player {object} - This represents the player in the game.
  */
 var checkPlayerBounds = function(player) {
-    
-    console.log(player);
-    
     if (player.y > 400 ) {
         player.y = 400;
     }
@@ -244,9 +226,9 @@ var checkPlayerBounds = function(player) {
  * @description Initialization of the game. The game starts with one enemy and one player.
  */
 var allEnemies = [];
-allEnemies.push(new Enemy(0, Math.random() * 184 + 50, Math.random() * 256 ));
+allEnemies.push(new Enemy(0, Math.random() * 184 + 50, 135, 88, Math.random() * 256 ));
 
-var player = new Player(202.5, 383, 50);
+var player = new Player(202.5, 383, 131, 76, 50);
 var playerScore = 0;
 var gameLevel = 1;
 
