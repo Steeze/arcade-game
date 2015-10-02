@@ -1,3 +1,4 @@
+"use strict";
 /**
  * Credit Due: 
  * Making Sprite-based Games with Canvas: http://jlongster.com/Making-Sprite-based-Games-with-Canvas
@@ -32,7 +33,7 @@ Enemy.prototype.update = function(dt) {
     if(this.x >= 505){
         this.x = 0;
     }
-    checkCollision(this);
+    player.checkCollision(this);
 };
 
 /**
@@ -84,22 +85,26 @@ Player.prototype.update = function(){
     if (this.x < -15) {
         this.x = -15;
     }
-    
+};
+
+/**
+ * @description
+ */
+Player.prototype.checkIfPlayerMadeIt = function(){
     if(this.y < -20){
         this.reset();
         this.level += 1;
         this.determineScore('madeIt');
-        
-        //levelUp(this.score, this.level);
-        this.levelUp();
+
+        levelUp(this.score, this.level);
     }
-    
 };
 
+/**
+ * @description
+ * @param scoreType
+ */
 Player.prototype.determineScore = function(scoreType){
-  if(this.score <= 0){
-       this.score = 0;
-   }
 
    if(scoreType === 'madeIt'){
        this.score += 10;
@@ -108,21 +113,11 @@ Player.prototype.determineScore = function(scoreType){
    if(scoreType === 'collided'){
        this.score -= 1;
    }
-};
 
-Player.prototype.levelUp = function(){
-    
-    allEnemies.splice(0, allEnemies.length);
-      
-    for (var i = 0; i <= this.gameLevel - 1; i++) {
-        var enemy = new Enemy(0, Math.random() * 184 + 50, 135, 88, Math.random() * 256);
-        allEnemies.push(enemy);
+    if(this.score <= 0){
+        this.score = 0;
     }
-      
-    displayScore(this.score);
-    displayLevel(this.level);
 };
-
 
 /**
  * @description render - Draws the player on the canvas
@@ -151,25 +146,20 @@ Player.prototype.handleInput = function(keyPress) {
  };
 
 /**
- * @description checkCollision - Checks the position of the enemy in response to the player. If a collision occurs the score is decreased by a point, the score is updated and the player reset.
- * @param enemy {object} - This represents the enemy in the game.
+ * @description -
+ * @param enemy
  */
- var checkCollision = function(enemy){
+Player.prototype.checkCollision = function(enemy){
 
-     if (player.y + player.height > enemy.y + 90 &&
-         player.x < enemy.x + enemy.width &&
-         player.y + 73 < enemy.y + enemy.height &&
-         player.x + player.width > enemy.x + 11) {
-         
-         player.reset();
-         //playerScore =  determinePlayerScore(playerScore, 'collided');
-
-         player.determineScore('collided');
-         
-         displayScore(player.score);
-     }
-
- };
+    if (this.y + this.height > enemy.y + 90 &&
+        this.x < enemy.x + enemy.width &&
+        this.y + 73 < enemy.y + enemy.height &&
+        this.x + this.width > enemy.x + 11) {
+        player.reset();
+        player.determineScore('collided');
+        displayScore(player.score);
+    }
+};
 
 /**
  * @description getCanvas - Returns the canvas tag on the DOM to append the level and score to.
@@ -186,7 +176,7 @@ var getCanvas = function(){
  */
 var displayScore = function(playerScore){
    var canvasElement =  getCanvas();    
-    scoreDisplay.innerHTML = 'Score: ' + player.score;
+    scoreDisplay.innerHTML = 'Score: ' + playerScore;
     document.body.insertBefore(scoreDisplay, canvasElement);
 };
 
@@ -195,9 +185,8 @@ var displayScore = function(playerScore){
  * @param gameLevel
  */
 var displayLevel = function(gameLevel){
-    
     var firstCsElement = getCanvas(); 
-    levelDisplay.innerHTML = 'Level: ' + player.level +' ';
+    levelDisplay.innerHTML = 'Level: ' + gameLevel +' ';
     document.body.insertBefore(levelDisplay, firstCsElement);
 };
 
