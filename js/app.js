@@ -72,7 +72,7 @@ Player.prototype.reset = function(){
 };
 
 /**
- * @description update - Update is called from the engine and currenty checks if the player is within its bounds and if the player has made it safely accross.
+ * @description update - Update is called from the engine and currenty checks if the player is within its bounds and if the player has made it safely across.
  */
 Player.prototype.update = function(){
     
