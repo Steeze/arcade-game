@@ -122,8 +122,8 @@
  * @constructor
  * @param {int} x - The x coordinate position on the canvas
  * @param {int} y - The y coordinate position on the canvas
- * @param height - The height of the enemy sprite
- * @param width - The width of the enemy sprite
+ * @param {int} height - The height of the enemy sprite
+ * @param {int} width - The width of the enemy sprite
  * @param {int} speed - The speed of the enemy in the game
   */
 var Enemy = function(x, y, height, width, speed) {
@@ -136,7 +136,8 @@ var Enemy = function(x, y, height, width, speed) {
 };
 
 /**
- * @description update - position method for a enemy in the game. When the enemy reaches the right boarder of the canvas, its set back to the beginning.
+ * @description update - position method for a enemy in the game.
+ * When the enemy reaches the right boarder of the canvas, its set back to the beginning.
  * @param dt - delta time - Used for smooth animation in the game.
  */
 Enemy.prototype.update = function(dt) {
@@ -158,11 +159,11 @@ Enemy.prototype.render = function() {
 /**
  * @description Represents a Player in the game.
  * @constructor
- * @param x - The x coordinate position on the canvas
- * @param y - The y coordinate position on the canvas
- * @param height - The height of the player sprite
- * @param width - The width of the player sprite
- * @param speed - The speed of the player in the game
+ * @param {int} x - The x coordinate position on the canvas
+ * @param {int} y - The y coordinate position on the canvas
+ * @param {int} height - The height of the player sprite
+ * @param {int} width - The width of the player sprite
+ * @param {int} speed - The speed of the player in the game
  */
 var Player = function(x, y, height, width, speed, score, level){
     this.sprite = 'images/char-boy.png';
@@ -176,7 +177,8 @@ var Player = function(x, y, height, width, speed, score, level){
 };
 
 /**
- * @description reset - Returns the player to the start position on the canvas after a collision with an enemy or a successful trip to the other side.
+ * @description reset - Returns the player to the start position on the canvas after a
+ * collision with an enemy or a successful trip to the other side.
  */
 Player.prototype.reset = function(){
   this.x = 200;
@@ -184,7 +186,8 @@ Player.prototype.reset = function(){
 };
 
 /**
- * @description update - Update is called from the engine and currenty checks if the player is within its bounds and if the player has made it safely across.
+ * @description update - Update is called from the engine and currenty checks if the player
+ * is within its bounds and if the player has made it safely across.
  */
 Player.prototype.update = function(){
     
@@ -241,7 +244,7 @@ Player.prototype.render = function () {
 
 /**
  * @description handleInput -  Responses to the key up event captured in the key up event listener.
- * @param keyPress {string} - The key up event converted to a string in the event listener.
+ * @param {string} keyPress  - The key up event converted to a string in the event listener.
  */
 Player.prototype.handleInput = function(keyPress) {
     if (keyPress == 'left') {
@@ -261,7 +264,7 @@ Player.prototype.handleInput = function(keyPress) {
 /**
  * @description checkCollision - Checks the position of the enemy in response to the player.
  * If a collision occurs the score is decreased by a point, the score is updated and the player reset
- * @param enemy
+ * @param {object} enemy
  */
 Player.prototype.checkCollision = function(enemy){
 
@@ -277,7 +280,7 @@ Player.prototype.checkCollision = function(enemy){
 
 /**
  * @description getCanvas - Returns the canvas tag on the DOM to append the level and score to.
- * @returns {*}
+ * @returns {The canvas DOM element}
  */
 var getCanvas = function(){
    var cs = document.getElementsByTagName('canvas');
@@ -296,7 +299,7 @@ var displayScore = function(playerScore){
 
 /**
  * @description displayLevel - Updates the DOM with the current level.
- * @param gameLevel
+ * @param {int} gameLevel
  */
 var displayLevel = function(gameLevel){
     var firstCsElement = getCanvas(); 
