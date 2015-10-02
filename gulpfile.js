@@ -6,7 +6,7 @@ var gulp   = require('gulp'),
     gutil = require('gulp-util'),
     open = require('gulp-open');
 
-gulp.task('default', ['watch']);
+gulp.task('default', ['watch', 'build-js']);
 
 gulp.task('open', function(){
     gulp.src('index.html')
