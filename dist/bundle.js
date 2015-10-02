@@ -200,7 +200,7 @@ Player.prototype.update = function(){
 };
 
 /**
- * @description
+ * @description checkIfPlayerMadeIt - Checks if the player made it to the end goal.
  */
 Player.prototype.checkIfPlayerMadeIt = function(){
     if(this.y < -20){
@@ -213,8 +213,9 @@ Player.prototype.checkIfPlayerMadeIt = function(){
 };
 
 /**
- * @description
- * @param scoreType
+ * @description determineScore - Determines the players current score based on scoring type.
+ * If no scoring type is passed in, the score will be returned. The score can not go below 0.
+ * @param scoreType {string} - This is the type of score that occurred, either madeIt or collided
  */
 Player.prototype.determineScore = function(scoreType){
 
@@ -258,7 +259,8 @@ Player.prototype.handleInput = function(keyPress) {
  };
 
 /**
- * @description -
+ * @description checkCollision - Checks the position of the enemy in response to the player.
+ * If a collision occurs the score is decreased by a point, the score is updated and the player reset
  * @param enemy
  */
 Player.prototype.checkCollision = function(enemy){
@@ -303,7 +305,8 @@ var displayLevel = function(gameLevel){
 };
 
 /**
- * @description levelUp -  Resets the current enemies and adds new enemies based on the level of the game. The speed and position of the enemies are random. The score and level are also updated.
+ * @description levelUp -  Resets the current enemies and adds new enemies based on the level of the game.
+ * The speed and position of the enemies are random. The score and level are also updated.
  * @param playerScore {int} - The players current score.
  * @param gameLevel {int} - The players current game level.
  */
